@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ChatController;
+
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RegistrationController;
@@ -48,3 +50,5 @@ Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('penda
 Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
 
 Route::get('/soal-test', [PendaftaranController::class, 'index'])->name('soal-test');
+
+Route::post('/api/chat', [ChatController::class, 'chat'])->name('api.chat');

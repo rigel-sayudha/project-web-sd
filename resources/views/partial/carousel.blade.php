@@ -21,7 +21,7 @@
                     <div class="w-full md:w-1/2 text-white mt-32">
                         <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">Selamat Datang di SD Premium</h1>
                         <p class="text-lg md:text-xl mb-8">Membentuk Generasi Unggul dengan Pendidikan Berkualitas</p>
-                        <a href="#register" class="inline-block bg-yellow-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-yellow-600 transition duration-300">
+                        <a href="{{ url('/pendaftaran') }}" class="inline-block bg-yellow-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-yellow-600 transition duration-300">
                             Gabung Sekarang
                         </a>
                     </div>
