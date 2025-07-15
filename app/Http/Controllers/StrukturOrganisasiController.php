@@ -10,6 +10,9 @@ class StrukturOrganisasiController extends Controller
     public function index()
     {
         $strukturs = StrukturOrganisasi::all();
-        return view('struktur-organisasi', compact('strukturs'));
+        $organizationImage = \Storage::disk('public')->exists('organization/struktur.png')
+            ? '/storage/organization/struktur.png'
+            : '/images/struktur-placeholder.png';
+        return view('struktur-organisasi', compact('strukturs', 'organizationImage'));
     }
 }

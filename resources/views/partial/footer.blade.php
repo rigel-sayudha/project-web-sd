@@ -5,10 +5,9 @@
             <!-- School Info & Social Media -->
             <div class="space-y-6">
                 <div class="flex items-center space-x-4">
-                    <img src="/images/logo.png" alt="SD Premium Logo" class="w-16 h-16">
+                    <img src="/images/logo.png" alt="SDIT SEMESTA CENDEKIA Logo" class="w-16 h-16">
                     <div>
-                        <h3 class="text-xl font-bold">SD Premium</h3>
-                        <p class="text-sm text-gray-400">Sekolah Unggulan Berkualitas</p>
+                        <h3 class="text-xl font-bold">SDIT SEMESTA CENDEKIA</h3>
                     </div>
                 </div>
                 <p class="text-gray-400">Membentuk generasi unggul dengan pendidikan berkualitas dan karakter yang kuat melalui pembelajaran inovatif dan lingkungan yang mendukung.</p>
@@ -28,7 +27,6 @@
                 </div>
             </div>
 
-            <!-- School News -->
             <div class="space-y-6">
                 <h4 class="text-lg font-semibold">Informasi Sekolah</h4>
                 <div class="space-y-4">
@@ -45,7 +43,6 @@
                 </div>
             </div>
 
-            <!-- School Agenda -->
             <div class="space-y-6">
                 <h4 class="text-lg font-semibold">Agenda Sekolah</h4>
                 <div class="space-y-4">
@@ -65,7 +62,7 @@
         </div>
 
         <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 SD Premium. All rights reserved.</p>
+            <p>&copy; 2025 SDIT SEMESTA CENDEKIA. All rights reserved.</p>
         </div>
     </div>
 </footer>

@@ -10,11 +10,20 @@ class Registration extends Model
     use HasFactory;
 
     protected $fillable = [
-        'student_name',
-        'parent_name',
-        'phone',
+        'nama',
+        'nik',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'jenis_kelamin',
+        'agama',
+        'nama_ayah',
+        'nama_ibu',
+        'pekerjaan_ayah',
+        'pekerjaan_ibu',
+        'alamat',
+        'no_telp',
         'email',
-        'address',
-        'birth_date'
+        'jadwal_abk',
+        'status_lolos',
     ];
 }

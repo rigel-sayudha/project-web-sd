@@ -100,17 +100,40 @@
     .mobile-submenu.open {
         max-height: 200px;
     }
+    .navbar .nav-text.bg-blue-500 {
+        background-color: #0f8941;
+        color: #fff;
+        border: none;
+        box-shadow: 0 2px 8px rgba(15,137,65,0.15);
+    }
+.navbar .nav-text.bg-blue-500:hover {
+    background-color: #0c6c33;
+}
+.navbar .nav-text.bg-yellow-400 {
+    background-color: #facc15;
+    color: #1f2937;
+    border: none;
+    box-shadow: 0 2px 8px rgba(250,204,21,0.15);
+}
+.navbar .nav-text.bg-yellow-400:hover {
+    background-color: #fde047;
+}
+@media (max-width: 1023px) {
+    .navbar .md\\:flex.absolute.right-0 {
+        position: static;
+        transform: none;
+        margin-right: 0;
+    }
+}
 </style>
 
 <nav class="navbar {{ Request::is('/') || Request::is('struktur-organisasi') ? 'navbar-transparent' : 'navbar-solid' }}">
     <div class="container mx-auto px-4">
         <div class="relative flex justify-between items-center h-16 md:h-20">
-            <!-- Logo and School Name -->
             <div class="flex items-center space-x-4 py-2">
                 <img src="images/logo.png" alt="Logo" class="h-12 w-12 md:h-14 md:w-14 object-contain">
                 <div class="flex flex-col">
-                    <span class="text-lg md:text-xl font-bold nav-text leading-tight">SD DUMMY</span>
-                    <span class="text-xs md:text-sm nav-text-secondary">Sekolah Unggulan Berkualitas</span>
+                    <span class="text-lg md:text-xl font-bold nav-text leading-tight">SDIT SEMESTA CENDEKIA</span>
                 </div>
             </div>
 
@@ -121,11 +144,9 @@
                 </svg>
             </button>
 
-            <!-- Desktop Menu -->
             <div class="hidden md:flex items-center space-x-8">
                 <a href="{{ url('/') }}" class="nav-text hover:text-blue-500 transition-colors duration-200">Beranda</a>
-                
-                <!-- Dropdown -->
+
                 <div class="relative group">
                     <button class="flex items-center nav-text group-hover:text-blue-500 transition-colors duration-200">
                         <span>Profil Sekolah</span>
@@ -139,14 +160,18 @@
                     </div>
                 </div>
 
-                <a href="{{ url('/') }}#berita" class="nav-text hover:text-blue-500 transition-colors duration-200">Berita</a>
+                <a href="{{ route('berita.index') }}" class="nav-text hover:text-blue-500 transition-colors duration-200">Berita</a>
+                <a href="{{ url('/galeri') }}" class="nav-text hover:text-blue-500 transition-colors duration-200">Galeri Sekolah</a>
                 <a href="{{ url('/') }}#ekstrakurikuler" class="nav-text hover:text-blue-500 transition-colors duration-200">Ekstrakurikuler</a>
-                <a href="{{ url('/') }}#prestasi" class="nav-text hover:text-blue-500 transition-colors duration-200">Prestasi</a>
-                <a href="{{ url('/pendaftaran') }}" class="nav-text hover:text-blue-500 transition-colors duration-200">Pendaftaran</a>
                 <a href="{{ url('/') }}#contact" class="nav-text hover:text-blue-500 transition-colors duration-200">Kontak</a>
             </div>
+            
         </div>
-
+        <!-- Tombol Pendaftaran & Hasil Seleksi di pojok kanan -->
+        <div class="hidden md:flex items-center space-x-2 absolute right-0 top-1/2 transform -translate-y-1/2 mr-4">
+            <a href="{{ url('/pendaftaran') }}" class="nav-text px-4 py-2 rounded-lg font-semibold" style="background-color:#0f8941;color:#fff;box-shadow:0 2px 8px rgba(15,137,65,0.15);">Pendaftaran</a>
+            <a href="{{ url('/hasil-seleksi') }}" class="nav-text px-4 py-2 rounded-lg font-semibold bg-yellow-400 text-gray-900 hover:bg-yellow-500 transition-colors duration-200 shadow-md ml-2">Hasil Seleksi</a>
+        </div>
         <div id="mobileMenu" class="md:hidden">
             <div class="py-3 space-y-1">
                 <a href="{{ url('/') }}" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-500 transition-colors duration-200">
@@ -171,14 +196,11 @@
                     </div>
                 </div>
 
-                <a href="{{ url('/') }}#berita" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-500 transition-colors duration-200">
+                <a href="{{ route('berita.index') }}" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-500 transition-colors duration-200">
                     Berita
                 </a>
                 <a href="{{ url('/') }}#ekstrakurikuler" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-500 transition-colors duration-200">
                     Ekstrakurikuler
-                </a>
-                <a href="{{ url('/') }}#prestasi" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-500 transition-colors duration-200">
-                    Prestasi
                 </a>
                 <a href="{{ url('/pendaftaran') }}" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-500 transition-colors duration-200">
                     Pendaftaran

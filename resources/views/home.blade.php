@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SD Premium - Sekolah Dasar Berkualitas</title>
+    <title>SDIT SEMESTA CENDEKIA - Sekolah Dasar Berkualitas</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         html {
             scroll-behavior: smooth;
         }
 
-        /* Carousel responsive adjustments */
         @media (max-width: 640px) {
             .carousel-item img {
                 height: 100vh;
             }
         }
 
-        /* Animation for sections */
         .fade-in-up {
             animation: fadeInUp 0.6s ease-out;
             opacity: 0;
@@ -46,9 +45,22 @@
     </style>
 </head>
 <body class="overflow-x-hidden">
+    <!-- Poster Pop-up (Iklan) hanya gambar -->
+    @php
+        $poster = \App\Models\Poster::where('status', 'published')->latest()->first();
+    @endphp
+    @if($poster)
+    <div id="home-poster-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40" style="display:none;">
+        <div class="relative bg-white rounded-xl shadow-2xl overflow-hidden" style="max-width:350px;">
+            <button id="close-home-poster" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900 text-lg font-bold" style="background:rgba(255,255,255,0.7);border:none;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;">&times;</button>
+            <img src="{{ asset('storage/' . $poster->gambar) }}" alt="Poster Iklan" class="w-full h-auto" style="max-height:400px;object-fit:cover;">
+        </div>
+    </div>
+    @endif
+
     @include('partial.navbar')
 
-   @include('partial.carousel')
+    @include('partial.carousel')
 
     <!-- Visi & Misi Section -->
     <section id="visi-misi" class="py-12 md:py-16 px-4">
@@ -59,7 +71,7 @@
                 <!-- Visi -->
                 <div class="mb-8 md:mb-12 fade-in-up">
                     <div class="flex flex-col md:flex-row items-start md:items-center mb-4">
-                        <div class="bg-blue-600 rounded-full p-2 mb-4 md:mb-0 md:mr-3">
+                        <div class="rounded-full p-2 mb-4 md:mb-0 md:mr-3" style="background-color:#0f8941;">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -75,7 +87,7 @@
 
                 <div class="fade-in-up">
                     <div class="flex items-center mb-4">
-                        <div class="bg-blue-600 rounded-full p-2 mr-3">
+                        <div class="rounded-full p-2 mr-3" style="background-color:#0f8941;">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                             </svg>
@@ -112,12 +124,11 @@
     <section id="informasi-sambutan" class="py-12 md:py-16 bg-gradient-to-b from-white to-blue-50">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-12 mb-12 md:mb-20">
-                <!-- Banner Image -->
                 <div class="lg:col-span-3">
                     <div class="h-full relative rounded-xl overflow-hidden shadow-xl hover-card">
                         <img src="/images/banner-kartini.jpeg" alt="Banner" class="w-full h-[150px] md:h-[200px] object-cover">
                     </div>
-                </div>                <!-- Content Side -->
+                </div>               
                 <div class="lg:col-span-9">
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
                         <!-- Pengumuman -->
@@ -147,44 +158,59 @@
                                     <p class="text-sm text-gray-600">20-25 Mei 2025</p>
                                 </div>
                             </div>
-                            <a href="#" class="inline-block mt-4 text-blue-600 hover:text-blue-800 text-sm font-semibold">Lihat semua pengumuman →</a>                        
+                            <a href="#" class="inline-block mt-4 text-green-600 hover:text-green-800 text-sm font-semibold">Lihat semua pengumuman →</a>                        
                         </div>                       
                         <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6 hover-card">
                             <h2 class="text-2xl font-bold mb-6">Sambutan Kepala Sekolah</h2>
+                            @php
+                                $sambutan = \App\Models\Sambutan::where('status', 'published')->latest()->first();
+                            @endphp
+                            @if($sambutan)
                             <div class="flex flex-col md:flex-row md:space-x-8">
-                                <div class="flex-shrink-0 mb-4 md:mb-0">
-                                    <img src="/images/kepala-sekolah.jpg" alt="Kepala Sekolah" class="w-full md:w-56 h-56 object-cover rounded-lg shadow-md">
+                                <div class="flex-shrink-0 mb-4 md:mb-0 w-full md:w-40">
+                                    @if($sambutan->foto)
+                                        <img src="{{ Storage::url($sambutan->foto) }}" alt="Kepala Sekolah" class="w-full h-40 object-cover rounded-lg shadow-md" style="max-width:160px;max-height:160px;display:block;margin:auto;">
+                                    @else
+                                        <div class="w-full md:w-40 h-40 bg-gray-200 flex items-center justify-center rounded-lg">
+                                            <span class="text-gray-400">No Image</span>
+                                        </div>
+                                    @endif
                                 </div>
                                 <div class="flex-grow">
-                                    <p class="text-gray-600 text-justify">
-                                        Selamat datang di SD Premium! Sebagai lembaga pendidikan yang berkomitmen pada keunggulan, 
-                                        kami senantiasa berupaya memberikan pendidikan terbaik bagi putra-putri bangsa.
-                                    </p>
-                                    <div id="sambutan-full" class="hidden">
-                                        <p class="text-gray-600 mt-4 text-justify">
-                                            Kami percaya bahwa setiap anak memiliki potensi unik yang perlu dikembangkan 
-                                            melalui pendekatan pembelajaran yang inovatif dan pembimbingan karakter yang intensif.
-                                        </p>
-                                        <p class="text-gray-600 mt-4 text-justify">
-                                            Di SD Premium, kami tidak hanya fokus pada prestasi akademik, tetapi juga pembentukan 
-                                            karakter dan pengembangan keterampilan abad 21. Dengan didukung oleh tenaga pendidik 
-                                            yang profesional dan fasilitas pembelajaran modern, kami berkomitmen untuk menciptakan 
-                                            lingkungan belajar yang inspiratif dan menyenangkan.
-                                        </p>
-                                        <p class="text-gray-600 mt-4 text-justify">
-                                            Mari bergabung dengan keluarga besar SD Premium untuk bersama-sama mempersiapkan 
-                                            generasi penerus bangsa yang cerdas, berkarakter, dan siap menghadapi tantangan global.
-                                        </p>
-                                        <div class="mt-4 text-right">
-                                            <p class="font-semibold text-gray-800">Dr. Siti Rahayu, M.Pd.</p>
-                                            <p class="text-gray-600">Kepala Sekolah SD Premium</p>
-                                        </div>
+                                    <div class="text-gray-600 text-justify" id="sambutan-short">
+                                        {{ \Illuminate\Support\Str::limit(strip_tags($sambutan->isi), 180) }}
                                     </div>
-                                    <button onclick="toggleSambutan()" id="read-more" class="text-blue-600 hover:text-blue-800 font-semibold mt-4">
-                                        Baca selengkapnya →
-                                    </button>
+                                    <div class="text-gray-600 text-justify hidden" id="sambutan-full">
+                                        {!! nl2br(e($sambutan->isi)) !!}
+                                    </div>
+                                    <div class="mt-4 text-right">
+                                        <p class="font-semibold text-gray-800 mb-0">{{ $sambutan->nama_kepala }}</p>
+                                        @if($sambutan->jabatan)
+                                            <p class="text-gray-600 mt-0">{{ $sambutan->jabatan }}</p>
+                                        @endif
+                                    </div>
+                                    <button type="button" id="read-more" class="font-semibold mt-4" style="color:#0f8941;" onclick="toggleSambutan()">Baca selengkapnya →</button>
                                 </div>
                             </div>
+                            <script>
+                                function toggleSambutan() {
+                                    const shortDiv = document.getElementById('sambutan-short');
+                                    const fullDiv = document.getElementById('sambutan-full');
+                                    const btn = document.getElementById('read-more');
+                                    if (fullDiv.classList.contains('hidden')) {
+                                        shortDiv.classList.add('hidden');
+                                        fullDiv.classList.remove('hidden');
+                                        btn.textContent = '← Tutup';
+                                    } else {
+                                        shortDiv.classList.remove('hidden');
+                                        fullDiv.classList.add('hidden');
+                                        btn.textContent = 'Baca selengkapnya →';
+                                    }
+                                }
+                            </script>
+                            @else
+                                <div class="text-gray-500">Belum ada sambutan kepala sekolah yang dipublikasikan.</div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -192,170 +218,137 @@
         </div>
     </section>
 
+    <!-- Accepted Students Section -->
+    <section id="accepted-students" class="py-12 md:py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8 text-center">Daftar Siswa yang Lolos Seleksi</h2>
+            @if($acceptedRegistrations->count())
+            <div class="overflow-x-auto">
+                <table class="min-w-full border border-gray-200">
+                    <thead>
+                        <tr class="text-white" style="background-color:#0f8941;">
+                            <th class="py-3 px-6 text-left">Peringkat</th>
+                            <th class="py-3 px-6 text-left">Nama Siswa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php $rank = 1; @endphp
+                        @foreach($acceptedRegistrations as $registrationPoint)
+                        <tr class="{{ $rank % 2 == 1 ? 'bg-white' : 'bg-gray-50' }} hover:bg-gray-100">
+                            <td class="py-3 px-6">{{ $rank }}</td>
+                            <td class="py-3 px-6">{{ $registrationPoint->registration->nama ?? 'N/A' }}</td>
+                        </tr>
+                        @php $rank++; @endphp
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <div class="text-center mt-6">
+                <a href="{{ url('hasil-seleksi') }}" class="inline-block px-6 py-3 font-semibold rounded-lg transition duration-300" style="background-color:#0f8941;color:#fff;">Hasil Seleksi</a>
+            </div>
+            @else
+            <p class="text-center text-gray-600">Belum ada siswa yang lolos seleksi.</p>
+            @endif
+        </div>
+    </section>
+
     <!-- Articles Section -->
-    <section id="articles" class="py-12 md:py-16 bg-blue-50">
+    <section id="articles" class="py-12 md:py-16" style="background-color:#e6f4ec;">
         <div class="container mx-auto px-4">
             <div class="text-center mb-8 md:mb-12">
                 <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-3">Berita Terkini</h2>
-                <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
+                <div class="w-24 h-1 mx-auto" style="background-color:#0f8941;"></div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                @forelse($articles as $article)
                 <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:-translate-y-2">
-                    <div class="relative">
-                        <img src="/images/news1.jpg" alt="Prestasi Olimpiade" class="w-full h-56 object-cover">
-                      
-                    </div>
-                    <div class="p-6">
-                        <div class="text-sm text-gray-500 mb-2">12 Juni 2025</div>
-                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Siswa SD Premium Raih Medali Emas Olimpiade Matematika</h3>
-                        <p class="text-gray-600 mb-4">Tim Olimpiade Matematika SD Premium berhasil meraih prestasi membanggakan dalam ajang Olimpiade Matematika Nasional 2025 yang diselenggarakan di Jakarta...</p>
-                        <a href="#" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold">
-                            Baca selengkapnya 
-                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                            </svg>
-                        </a>
+                <div class="relative">
+                    <img src="{{ $article->gambar ? asset('storage/' . ltrim($article->gambar, '/')) : asset('images/news1.jpg') }}" alt="{{ $article->judul }}" class="w-full h-56 object-cover">
+                    <div class="absolute bottom-2 left-2 bg-black bg-opacity-50 rounded-md px-3 py-1">
+                        <span class="text-white text-xs font-semibold">{{ $article->created_at->format('d F Y') }}</span>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:-translate-y-2">
-                    <div class="relative">
-                        <img src="/images/news2.jpg" alt="Kegiatan Sekolah" class="w-full h-56 object-cover">
-                    
-                    </div>
-                    <div class="p-6">
-                        <div class="text-sm text-gray-500 mb-2">10 Juni 2025</div>
-                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Festival Seni dan Budaya SD Premium 2025</h3>
-                        <p class="text-gray-600 mb-4">Mengangkat tema "Budaya Nusantara", Festival Seni dan Budaya tahun ini menampilkan berbagai pertunjukan memukau dari siswa-siswi berbakat SD Premium...</p>
-                        <a href="#" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold">
-                            Baca selengkapnya 
-                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-
-
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:-translate-y-2">
-                    <div class="relative">
-                        <img src="/images/news3.jpg" alt="Fasilitas Baru" class="w-full h-56 object-cover">
-               
-                    </div>
-                    <div class="p-6">
-                        <div class="text-sm text-gray-500 mb-2">8 Juni 2025</div>
-                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Peresmian Laboratorium Digital Terpadu</h3>
-                        <p class="text-gray-600 mb-4">SD Premium meresmikan Laboratorium Digital Terpadu yang dilengkapi dengan perangkat teknologi terkini untuk mendukung pembelajaran era digital...</p>
-                        <a href="#" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold">
-                            Baca selengkapnya 
-                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
+            <div class="p-6">
+                <!--<div class="text-sm text-gray-500 mb-2">{{ $article->created_at->format('d F Y') }}</div>-->
+                <h3 class="text-xl font-semibold mb-3 text-gray-800">{{ $article->judul }}</h3>
+                <p class="text-gray-600 mb-4">{{ \Illuminate\Support\Str::limit(strip_tags($article->konten), 120) }}</p>
+                <a href="{{ route('berita.show', $article->slug) }}" class="px-4 py-2 rounded text-white" style="background-color:#0f8941;transition:background-color 0.2s;" onmouseover="this.style.backgroundColor='#0c6c33'" onmouseout="this.style.backgroundColor='#0f8941'">Baca Selengkapnya</a>
+            </div>
+        </div>
+                @empty
+                <div class="col-span-3 text-center text-gray-500">Belum ada berita.</div>
+                @endforelse
             </div>
         </div>
     </section>
+
+    @include('partial.article-modal')
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('article-modal');
+        const modalTitle = document.getElementById('modal-article-title');
+        const modalContent = document.getElementById('modal-article-content');
+        const closeBtn = document.getElementById('close-article-modal');
+
+        document.querySelectorAll('.read-more-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const articleId = this.getAttribute('data-article-id');
+                fetch(`/api/articles/${articleId}`)
+                    .then(response => response.json())
+                    .then data => {
+                        modalTitle.textContent = data.judul;
+                        modalContent.innerHTML = data.konten;
+                        modal.classList.remove('hidden');
+                    })
+                    .catch(error => {
+                        alert('Gagal memuat artikel.');
+                        console.error(error);
+                    });
+            });
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            modalTitle.textContent = '';
+            modalContent.innerHTML = '';
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeBtn.click();
+            }
+        });
+    });
+    </script>
 
     <!-- Ekstrakurikuler Section -->
     <section id="ekstrakurikuler" class="py-12 md:py-16 bg-gradient-to-b from-blue-50 to-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-8 md:mb-12">
                 <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-3">Ekstrakurikuler</h2>
-                <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
+                <div class="w-24 h-1 mx-auto" style="background-color:#0f8941;"></div>
                 <p class="mt-4 text-gray-600">Mengembangkan Bakat dan Minat Siswa</p>
             </div>
-
+            @if($ekstrakurikulers->count())
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-                <!-- Pramuka -->
+                @foreach($ekstrakurikulers as $ekstra)
                 <div class="bg-white rounded-xl shadow-lg p-6 transform transition duration-300 hover:-translate-y-2">
-                    <div class="bg-yellow-500 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Pramuka</h3>
-                    <p class="text-gray-600 text-sm">Membentuk karakter kepemimpinan dan kemandirian melalui kegiatan kepramukaan</p>
+                    @if($ekstra->foto)
+                        <img src="{{ asset('storage/' . $ekstra->foto) }}" alt="{{ $ekstra->nama }}" class="w-20 h-20 object-cover rounded-full mx-auto mb-4">
+                    @else
+                        <div class="rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4" style="background-color:#b6e2c7;">
+                            <svg class="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                        </div>
+                    @endif
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2 text-center">{{ $ekstra->nama }}</h3>
+                    <p class="text-gray-600 text-sm text-center">{{ $ekstra->deskripsi }}</p>
                 </div>
-
-                <!-- Robotika -->
-                <div class="bg-white rounded-xl shadow-lg p-6 transform transition duration-300 hover:-translate-y-2">
-                    <div class="bg-blue-500 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Robotika</h3>
-                    <p class="text-gray-600 text-sm">Mengembangkan kreativitas dan logika melalui pembelajaran robotika dan programming</p>
-                </div>
-
-                <!-- Seni Musik -->
-                <div class="bg-white rounded-xl shadow-lg p-6 transform transition duration-300 hover:-translate-y-2">
-                    <div class="bg-purple-500 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Seni Musik</h3>
-                    <p class="text-gray-600 text-sm">Mengasah bakat musikal melalui pembelajaran vokal dan instrumental</p>
-                </div>
-
-                <!-- English Club -->
-                <div class="bg-white rounded-xl shadow-lg p-6 transform transition duration-300 hover:-translate-y-2">
-                    <div class="bg-green-500 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">English Club</h3>
-                    <p class="text-gray-600 text-sm">Meningkatkan kemampuan berbahasa Inggris melalui aktivitas komunikatif yang menyenangkan</p>
-                </div>
-
-                <!-- Olahraga -->
-                <div class="bg-white rounded-xl shadow-lg p-6 transform transition duration-300 hover:-translate-y-2">
-                    <div class="bg-red-500 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Olahraga</h3>
-                    <p class="text-gray-600 text-sm">Membentuk jiwa sportivitas dan kesehatan fisik melalui berbagai cabang olahraga</p>
-                </div>
-
-                <!-- Seni Tari -->
-                <div class="bg-white rounded-xl shadow-lg p-6 transform transition duration-300 hover:-translate-y-2">
-                    <div class="bg-pink-500 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Seni Tari</h3>
-                    <p class="text-gray-600 text-sm">Melestarikan budaya melalui pembelajaran tari tradisional dan modern</p>
-                </div>
-
-                <!-- Klub Sains -->
-                <div class="bg-white rounded-xl shadow-lg p-6 transform transition duration-300 hover:-translate-y-2">
-                    <div class="bg-indigo-500 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Klub Sains</h3>
-                    <p class="text-gray-600 text-sm">Mengeksplorasi dunia sains melalui eksperimen dan proyek-proyek ilmiah</p>
-                </div>
-
-                <!-- Melukis -->
-                <div class="bg-white rounded-xl shadow-lg p-6 transform transition duration-300 hover:-translate-y-2">
-                    <div class="bg-orange-500 rounded-full w-14 h-14 flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Melukis</h3>
-                    <p class="text-gray-600 text-sm">Mengembangkan kreativitas dan ekspresi diri melalui seni lukis</p>
-                </div>
+                @endforeach
             </div>
+            @endif
         </div>
     </section>
 
@@ -364,7 +357,7 @@
         <div class="container mx-auto px-4">
             <div class="text-center mb-8 md:mb-12">
                 <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-3">Hubungi Kami</h2>
-                <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
+                <div class="w-24 h-1 mx-auto" style="background-color:#0f8941;"></div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-12">
@@ -386,7 +379,7 @@
                     <h3 class="text-2xl font-semibold text-gray-800 mb-6">Informasi Kontak</h3>
                     <div class="space-y-6">
                         <div class="flex items-start">
-                            <div class="bg-blue-600 rounded-full p-3 mr-4">
+                            <div class="rounded-full p-3 mr-4" style="background-color:#0f8941;">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -399,7 +392,7 @@
                         </div>
 
                         <div class="flex items-start">
-                            <div class="bg-blue-600 rounded-full p-3 mr-4">
+                            <div class="rounded-full p-3 mr-4" style="background-color:#0f8941;">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                                 </svg>
@@ -411,7 +404,7 @@
                         </div>
 
                         <div class="flex items-start">
-                            <div class="bg-blue-600 rounded-full p-3 mr-4">
+                            <div class="rounded-full p-3 mr-4" style="background-color:#0f8941;">
                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                                 </svg>
@@ -428,7 +421,7 @@
 
             <!-- Contact Form -->
             <div class="max-w-3xl mx-auto">
-                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8">
+                <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 h-[300px] md:h-[400px] flex flex-col justify-between">
                     <h3 class="text-xl md:text-2xl font-semibold text-gray-800 mb-6">Kotak Saran</h3>
                     <form action="{{ route('contact.store') }}" method="POST" class="space-y-6">
                         @csrf
@@ -457,9 +450,7 @@
                             <textarea id="message" name="message" rows="6" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent" required></textarea>
                         </div>
                         <div class="text-right">
-                            <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition duration-300">
-                            Kirim Pesan
-                            </button>
+                            <button type="submit" class="px-6 py-3 font-semibold rounded-lg transition duration-300" style="background-color:#0f8941;color:#fff;">Kirim</button>
                         </div>
                     </form>
                 </div>
@@ -468,25 +459,22 @@
     </section>
 
     @include('partial.footer')
-
     <script>
-        function toggleSambutan() {
-            const sambutanFull = document.getElementById('sambutan-full');
-            const readMoreBtn = document.getElementById('read-more');
-            
-            if (sambutanFull.classList.contains('hidden')) {
-                sambutanFull.classList.remove('hidden');
-                readMoreBtn.textContent = '← Tutup';
-            } else {
-                sambutanFull.classList.add('hidden');
-                readMoreBtn.textContent = 'Baca selengkapnya →';
-            }
-        }
-
-        // Intersection Observer for fade-in-up animation
+        // Poster pop-up logic
         document.addEventListener('DOMContentLoaded', function() {
+            var popup = document.getElementById('popup-poster');
+            var closeBtn = document.getElementById('close-poster');
+            // Show poster only on first load
+            if (!sessionStorage.getItem('posterClosed')) {
+                popup.style.display = 'flex';
+            }
+            closeBtn.addEventListener('click', function() {
+                popup.style.display = 'none';
+                sessionStorage.setItem('posterClosed', '1');
+            });
+
+            // Intersection Observer for fade-in-up animation
             const fadeElements = document.querySelectorAll('.fade-in-up');
-            
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -497,14 +485,32 @@
             }, {
                 threshold: 0.1
             });
-
             fadeElements.forEach(element => {
                 observer.observe(element);
             });
-
-            // Existing carousel code
-            // ...existing carousel JavaScript...
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (!sessionStorage.getItem('homePosterClosed')) {
+                document.getElementById('home-poster-modal').style.display = 'flex';
+            }
+            document.getElementById('close-home-poster').addEventListener('click', function () {
+                document.getElementById('home-poster-modal').style.display = 'none';
+                sessionStorage.setItem('homePosterClosed', '1');
+            });
+        });
+
+        function toggleSambutan() {
+            const sambutanFull = document.getElementById('sambutan-full');
+            const readMoreBtn = document.getElementById('read-more');
+            if (sambutanFull.classList.contains('hidden')) {
+                sambutanFull.classList.remove('hidden');
+                readMoreBtn.textContent = '← Tutup';
+            } else {
+                sambutanFull.classList.add('hidden');
+                readMoreBtn.textContent = 'Baca selengkapnya →';
+            }
+        }
     </script>
 </body>
 </html>

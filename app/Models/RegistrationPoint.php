@@ -12,7 +12,8 @@ class RegistrationPoint extends Model
         'donation_amount',
         'donation_points',
         'total_points',
-        'answers'
+        'answers',
+        'status_lolos',
     ];
 
     protected $casts = [

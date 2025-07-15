@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Struktur Organisasi - SD Premium</title>
+    <title>Struktur Organisasi - SDIT SEMESTA CENDEKIA</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         /* Animation for sections */
@@ -56,17 +56,27 @@
     @include('partial.navbar')
 
     <!-- Header Section -->
-    <section class="relative py-20 bg-gradient-to-b from-blue-50 to-white">
+    <section class="relative pt-32 pb-20 bg-gradient-to-b from-blue-50 to-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
                 <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Struktur Organisasi</h1>
                 <div class="w-24 h-1 bg-blue-600 mx-auto mb-4"></div>
-                <p class="text-xl text-gray-600">Pengurus dan Tenaga Pendidik SD Premium</p>
+                <p class="text-xl text-gray-600">Pengurus dan Tenaga Pendidik SDIT SEMESTA CENDEKIA</p>
             </div>
         </div>
     </section>
 
-    <!-- Struktur Organisasi Section -->
+    <!-- Struktur Organisasi Bagan (Gambar) -->
+    <section class="py-4 md:py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col items-center mb-10">
+                <img src="{{ $organizationImage }}" alt="Bagan Struktur Organisasi" class="w-full max-w-3xl rounded-lg shadow border border-gray-200 object-contain bg-white">
+                <span class="text-gray-500 text-sm mt-2">Bagan Struktur Organisasi SDIT SEMESTA CENDEKIA</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Struktur Organisasi Section (Personal) -->
     <section class="py-12 md:py-16">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

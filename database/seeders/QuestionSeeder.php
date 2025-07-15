@@ -11,86 +11,70 @@ class QuestionSeeder extends Seeder
     {
         $questions = [
             [
-                'question' => '2 + 2 = ?',
-                'option_a' => '3',
-                'option_b' => '4',
-                'option_c' => '5',
-                'option_d' => '6',
-                'correct_answer' => 'B'
+                'question' => 'Jika kamu tidak tahu cara mengerjakan sesuatu, apa yang kamu lakukan?',
+                'option_a' => 'Bertanya pada orang lain',
+                'option_b' => 'Marah dan meninggalkan tugas',
+                'option_c' => 'Menangis atau diam saja',
+                'option_d' => 'Melempar atau merusak benda di sekitar',
+                'correct_answer' => 'A' // default ke A jika tidak ada kunci
             ],
             [
-                'question' => 'Ibu kota Indonesia adalah?',
-                'option_a' => 'Jakarta',
-                'option_b' => 'Bandung',
-                'option_c' => 'Surabaya',
-                'option_d' => 'Medan',
+                'question' => 'Saat kamu bermain dengan teman dan temanmu mengambil mainanmu, apa yang kamu lakukan?',
+                'option_a' => 'Mengatakan dengan sopan agar dia mengembalikan',
+                'option_b' => 'Menarik mainannya kembali dengan paksa',
+                'option_c' => 'Menangis dan lari dari situ',
+                'option_d' => 'Mendorong atau memukul teman itu',
                 'correct_answer' => 'A'
             ],
             [
-                'question' => 'Berapa hasil dari 5 x 6?',
-                'option_a' => '30',
-                'option_b' => '25',
-                'option_c' => '35',
-                'option_d' => '40',
-                'correct_answer' => 'A'
+                'question' => 'Jika guru menyuruh duduk dan diam, kamu biasanya...',
+                'option_a' => 'Duduk dan mendengarkan',
+                'option_b' => 'Duduk sebentar lalu mulai bicara sendiri',
+                'option_c' => 'Tidak bisa diam, selalu bergerak',
+                'option_d' => 'Berjalan-jalan dan tidak memperhatikan',
+                'correct_answer' => 'A' // default ke A jika tidak ada kunci
             ],
             [
-                'question' => 'Planet terdekat dengan Matahari adalah?',
-                'option_a' => 'Venus',
-                'option_b' => 'Bumi',
-                'option_c' => 'Merkurius',
-                'option_d' => 'Mars',
-                'correct_answer' => 'C'
+                'question' => 'Apakah kamu suka suara keras seperti bel, petir, atau mesin?',
+                'option_a' => 'Biasa saja',
+                'option_b' => 'Kadang takut',
+                'option_c' => 'Sering menutup telinga',
+                'option_d' => 'Sangat takut dan menangis setiap kali mendengar',
+                'correct_answer' => 'A' // default ke A jika tidak ada kunci
             ],
             [
-                'question' => 'Bahasa pemrograman yang digunakan untuk web adalah?',
-                'option_a' => 'Python',
-                'option_b' => 'JavaScript',
-                'option_c' => 'C++',
-                'option_d' => 'Java',
-                'correct_answer' => 'B'
+                'question' => 'Saat melihat orang lain sedih, kamu biasanya merasa:',
+                'option_a' => 'Ikut sedih dan ingin membantu',
+                'option_b' => 'Tidak tahu harus bagaimana',
+                'option_c' => 'Bingung lalu pergi',
+                'option_d' => 'Tidak peduli sama sekali',
+                'correct_answer' => 'A' // default ke A jika tidak ada kunci
             ],
             [
-                'question' => 'Siapa penemu lampu pijar?',
-                'option_a' => 'Nikola Tesla',
-                'option_b' => 'Thomas Edison',
-                'option_c' => 'Alexander Graham Bell',
-                'option_d' => 'Albert Einstein',
-                'correct_answer' => 'B'
+                'question' => 'Apakah kamu suka memutar benda, melompat terus-menerus, atau mengulang kata yang sama?',
+                'option_a' => 'Tidak pernah',
+                'option_b' => 'Kadang',
+                'option_c' => 'Sering',
+                'option_d' => 'Hampir setiap hari',
+                'correct_answer' => 'A' // default ke A jika tidak ada kunci
             ],
             [
-                'question' => 'Apa ibu kota Jepang?',
-                'option_a' => 'Seoul',
-                'option_b' => 'Tokyo',
-                'option_c' => 'Beijing',
-                'option_d' => 'Bangkok',
-                'correct_answer' => 'B'
-            ],
-            [
-                'question' => 'Berapa jumlah provinsi di Indonesia?',
-                'option_a' => '34',
-                'option_b' => '33',
-                'option_c' => '35',
-                'option_d' => '32',
-                'correct_answer' => 'A'
-            ],
-            [
-                'question' => 'Apa warna campuran merah dan biru?',
-                'option_a' => 'Hijau',
-                'option_b' => 'Ungu',
-                'option_c' => 'Kuning',
-                'option_d' => 'Oranye',
-                'correct_answer' => 'B'
-            ],
-            [
-                'question' => 'Siapa presiden pertama Indonesia?',
-                'option_a' => 'Soekarno',
-                'option_b' => 'Soeharto',
-                'option_c' => 'Joko Widodo',
-                'option_d' => 'B.J. Habibie',
-                'correct_answer' => 'A'
+                'question' => 'Ketika orang tua atau guru memanggilmu, kamu biasanya...',
+                'option_a' => 'Langsung menjawab',
+                'option_b' => 'Kadang mendengar, kadang tidak',
+                'option_c' => 'Sering tidak menjawab meski dekat',
+                'option_d' => 'Tidak peduli dan tetap melakukan kegiatan sendiri',
+                'correct_answer' => 'A' // default ke A jika tidak ada kunci
             ],
         ];
+
+        // Pastikan semua soal punya correct_answer
+        foreach ($questions as &$q) {
+            if (!isset($q['correct_answer']) || $q['correct_answer'] === null) {
+                $q['correct_answer'] = 'A';
+            }
+        }
+        unset($q);
 
         foreach ($questions as $q) {
             Question::create($q);

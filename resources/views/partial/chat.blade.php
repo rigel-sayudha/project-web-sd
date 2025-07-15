@@ -1,4 +1,4 @@
-<style>
+{{-- <style>
 #chatButton {
     position: fixed;
     bottom: 20px;
@@ -164,4 +164,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-</script>
+</script> --}}

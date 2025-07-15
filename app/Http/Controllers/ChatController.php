@@ -11,8 +11,7 @@ class ChatController extends Controller
     {
         $message = $request->input('message');
         
-        // Here you would typically integrate with an AI service
-        // For now, we'll return a simple response
+
         $responses = [
             'Terima kasih atas pertanyaan Anda. Saya akan membantu menjawabnya.',
             'Mohon tunggu sebentar, saya akan mencari informasi yang tepat.',

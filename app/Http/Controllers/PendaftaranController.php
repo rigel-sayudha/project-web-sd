@@ -12,10 +12,9 @@ class PendaftaranController extends Controller
 {
     public function index()
     {
-        // Check if registration is open (between 15 May - 30 June 2025)
         $now = Carbon::now();
         $startDate = Carbon::create(2025, 5, 15);
-        $endDate = Carbon::create(2025, 6, 30);
+        $endDate = Carbon::create(2025, 7, 30);
         
         $is_open = $now->between($startDate, $endDate);
         
@@ -27,90 +26,105 @@ class PendaftaranController extends Controller
 
     public function store(Request $request)
     {
-        $step = $request->query('step', 1);
-        
-        switch($step) {
-            case '2':
-                // Validate and store step 1 data in session
-                $validatedData = $request->validate([
-                    'nama' => 'required|string|max:255',
-                    'nik' => 'required|string|size:16|unique:registrations',
-                    'tempat_lahir' => 'required|string|max:255',
-                    'tanggal_lahir' => 'required|date',
-                    'jenis_kelamin' => 'required|in:L,P',
-                    'agama' => 'required|string',
-                    'nama_ayah' => 'required|string|max:255',
-                    'nama_ibu' => 'required|string|max:255',
-                    'pekerjaan_ayah' => 'required|string|max:255',
-                    'pekerjaan_ibu' => 'required|string|max:255',
-                    'alamat' => 'required|string',
-                    'no_telp' => 'required|string|max:20',
-                    'email' => 'required|email|max:255|unique:registrations'
-                ]);
-                
-                $request->session()->put('registration_data', $validatedData);
-                
-                // Redirect to step 2 (soal test)
-                return redirect()->route('pendaftaran', ['step' => 2]);
-                
-            case '3':
-                // Handle soal test submission
-                $answers = $request->input('answers', []);
-                $examScore = 0;
-                
-                // Calculate exam score (10 points per correct answer)
-                foreach ($answers as $questionId => $answer) {
-                    $question = Question::find($questionId);
-                    if ($question && $question->correct_answer === $answer) {
-                        $examScore += 10;
-                    }
-                }
-                
-                // Store exam score in session
-                $request->session()->put('exam_score', $examScore);
-                $request->session()->put('answers', $answers);
-                
-                return redirect()->route('pendaftaran', ['step' => 3]);
-                
-            case 'finish':
-                // Validate donation amount
-                $request->validate([
-                    'sumbangan' => 'required|integer|min:100000'
-                ]);
-                
-                // Calculate donation points (1 point per 100,000)
-                $donationAmount = $request->input('sumbangan');
-                $donationPoints = floor($donationAmount / 100000);
-                
-                // Get registration data from session
-                $registrationData = $request->session()->get('registration_data');
-                
-                \Log::debug('Registration data from session:', $registrationData ?: []);
-                
-                // Create registration record
-                $registration = Registration::create($registrationData);
-                
-                // Create registration points record
-                RegistrationPoint::create([
-                    'registration_id' => $registration->id,
-                    'exam_score' => $request->session()->get('exam_score', 0),
-                    'donation_amount' => $donationAmount,
-                    'donation_points' => $donationPoints,
-                    'total_points' => $request->session()->get('exam_score', 0) + $donationPoints,
-                    'answers' => json_encode($request->session()->get('answers', [])),
-                ]);
-                
-                // Clear session data
-                $request->session()->forget(['registration_data', 'exam_score', 'answers']);
-                
-                return redirect()->route('pendaftaran.success')->with([
-                    'exam_score' => $request->session()->get('exam_score', 0),
-                    'donation_points' => $donationPoints,
-                    'total_points' => $request->session()->get('exam_score', 0) + $donationPoints
-                ]);
-                
-            default:
-                return redirect()->route('pendaftaran');
+        $step = $request->query('step');
+
+        if ($step === '2') {
+            $validatedData = $request->validate([
+                'nama' => 'required|string|max:255',
+                'tempat_lahir' => 'required|string|max:255',
+                'tanggal_lahir' => [
+                    'required',
+                    'date',
+                ],
+                'jenis_kelamin' => 'required|in:L,P',
+                'agama' => 'required|string',
+                'no_telp' => 'required|string|max:20',
+                'asal_sekolah' => 'required|string|max:255',
+                'nama_ayah' => 'required|string|max:255',
+                'nama_ibu' => 'required|string|max:255',
+                'alamat_ortu' => 'required|string',
+                'telepon_ortu' => 'required|string|max:20',
+                'pekerjaan_ayah' => 'required|string|max:255',
+                'pekerjaan_ibu' => 'required|string|max:255',
+                'nama_wali' => 'nullable|string|max:255',
+                'alamat_wali' => 'nullable|string',
+                'no_telp_wali' => 'nullable|string|max:20',
+                'pekerjaan_wali' => 'nullable|string|max:255',
+                'email' => 'required|email|max:255|unique:registrations',
+            ]);
+
+            $validatedData['alamat'] = $validatedData['alamat_ortu'] ?? '';
+
+            \Log::debug('Step2 Validated Data', $validatedData);
+
+            $request->session()->put('registration_data', $validatedData);
+            $request->session()->put('completed_step', 2);
+
+            \Log::debug('Step2 Session', [
+                'registration_data' => $request->session()->get('registration_data'),
+                'completed_step' => $request->session()->get('completed_step'),
+            ]);
+
+            // Redirect ke halaman jadwal tes (step 2)
+            return redirect()->route('pendaftaran', ['step' => 2]);
         }
+
+        elseif ($step === '3') {
+            if (!$request->session()->has('registration_data') || $request->session()->get('completed_step') < 2) {
+                return redirect()->route('pendaftaran', ['step' => 2])
+                    ->withErrors(['error' => 'Silakan lengkapi data pendaftaran terlebih dahulu']);
+            }
+
+            // Ambil data pendaftaran dari session
+            $registrationData = $request->session()->get('registration_data');
+            $jadwal_abk = $request->input('jadwal_abk');
+            if (empty($registrationData['email'])) {
+                return redirect()->route('pendaftaran', ['step' => 2])
+                    ->withErrors(['email' => 'Email wajib diisi dan belum pernah digunakan.']);
+            }
+            if (Registration::where('email', $registrationData['email'])->exists()) {
+                return redirect()->route('pendaftaran', ['step' => 2])
+                    ->withErrors(['email' => 'Email sudah digunakan, silakan gunakan email lain.']);
+            }
+            // Simpan data pendaftaran
+            try {
+                \DB::beginTransaction();
+                if (empty($registrationData['alamat']) && !empty($registrationData['alamat_ortu'])) {
+                    $registrationData['alamat'] = $registrationData['alamat_ortu'];
+                }
+                $registrationData['jadwal_abk'] = $jadwal_abk;
+                $registrationData['status_lolos'] = false;
+                $registration = Registration::create($registrationData);
+                \DB::commit();
+                $request->session()->forget([
+                    'registration_data',
+                    'exam_score',
+                    'answers',
+                    'completed_step'
+                ]);
+                return redirect()->route('pendaftaran.success');
+            } catch (\Exception $e) {
+                \DB::rollback();
+                \Log::error('Error saving registration: ' . $e->getMessage());
+                return redirect()->back()->withErrors('Terjadi kesalahan saat menyimpan data. Silakan coba lagi.');
+            }
+        }
+        return redirect()->route('pendaftaran');
+    }
+
+    public function success()
+    {
+        return view('pendaftaran.success');
+    }
+
+    public function selectionResults()
+    {
+        $acceptedRegistrations = \App\Models\Registration::where('status_lolos', 1)
+            ->orderBy('nama', 'asc')
+            ->get();
+
+        $currentYear = date('Y');
+
+        return view('hasil-seleksi', compact('acceptedRegistrations', 'currentYear'));
     }
 }

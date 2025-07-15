@@ -19,7 +19,7 @@
             <div class="container mx-auto px-4 relative z-10 h-full flex items-center justify-center">
                 <div class="w-full flex flex-col items-center text-center">
                     <div class="w-full md:w-1/2 text-white mt-32">
-                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">Selamat Datang di SD Premium</h1>
+                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">Selamat Datang di SDIT SEMESTA CENDEKIA</h1>
                         <p class="text-lg md:text-xl mb-8">Membentuk Generasi Unggul dengan Pendidikan Berkualitas</p>
                         <a href="{{ url('/pendaftaran') }}" class="inline-block bg-yellow-500 text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-yellow-600 transition duration-300">
                             Gabung Sekarang
@@ -40,7 +40,6 @@
                 </svg>
             </button>
 
-            <!-- Carousel Indicators -->
             <div class="carousel-indicators absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
                 <button class="w-3 h-3 rounded-full bg-white bg-opacity-50 active"></button>
                 <button class="w-3 h-3 rounded-full bg-white bg-opacity-50"></button>
@@ -50,7 +49,6 @@
     </section>
 
     <script>
-    // Carousel functionality
     document.addEventListener('DOMContentLoaded', function() {
         const carousel = document.querySelector('.carousel');
         const items = carousel.querySelectorAll('.carousel-item');
@@ -75,11 +73,9 @@
             showSlide(currentIndex);
         }
 
-        // Event listeners
         carousel.querySelector('.next').addEventListener('click', nextSlide);
         carousel.querySelector('.prev').addEventListener('click', prevSlide);
 
-        // Auto slide
         setInterval(nextSlide, 5000);
     });
     </script>

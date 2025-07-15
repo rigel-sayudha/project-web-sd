@@ -18,15 +18,12 @@ return new class extends Migration
             $table->text('konten');
             $table->string('gambar')->nullable();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('status')->default('draft');
+            $table->string('status')->default('published');
             $table->timestamps();
             $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('artikels');
