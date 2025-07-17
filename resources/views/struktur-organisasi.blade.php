@@ -60,7 +60,7 @@
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
                 <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Struktur Organisasi</h1>
-                <div class="w-24 h-1 bg-blue-600 mx-auto mb-4"></div>
+                <div class="w-24 h-1 bg-green-600 mx-auto mb-4"></div>
                 <p class="text-xl text-gray-600">Pengurus dan Tenaga Pendidik SDIT SEMESTA CENDEKIA</p>
             </div>
         </div>

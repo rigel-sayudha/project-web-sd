@@ -1,6 +1,6 @@
 <div class="bg-white p-8 rounded-xl shadow-lg">
     <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Penjadwalan Tes Anak Berkebutuhan Khusus (ABK)</h1>
-    <form action="{{ route('pendaftaran.store') }}?step=3" method="POST" class="space-y-8">
+    <form action="{{ route('pendaftaran.store') }}?step=finish" method="POST" class="space-y-8">
         @csrf
         <div class="bg-gray-50 p-6 rounded-lg">
             <p class="text-lg font-semibold text-gray-800 mb-4">Silakan pilih jadwal tes untuk anak berkebutuhan khusus (ABK):</p>

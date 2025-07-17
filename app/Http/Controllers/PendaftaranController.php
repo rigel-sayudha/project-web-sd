@@ -38,20 +38,37 @@ class PendaftaranController extends Controller
                 ],
                 'jenis_kelamin' => 'required|in:L,P',
                 'agama' => 'required|string',
-                'no_telp' => 'required|string|max:20',
                 'asal_sekolah' => 'required|string|max:255',
                 'nama_ayah' => 'required|string|max:255',
                 'nama_ibu' => 'required|string|max:255',
                 'alamat_ortu' => 'required|string',
                 'telepon_ortu' => 'required|string|max:20',
                 'pekerjaan_ayah' => 'required|string|max:255',
+                'penghasilan_ayah' => 'required|string|max:255',
                 'pekerjaan_ibu' => 'required|string|max:255',
+                'penghasilan_ibu' => 'required|string|max:255',
+                'status_pip' => 'nullable|string|max:2',
+                'file_kk' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+                'file_akta' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
                 'nama_wali' => 'nullable|string|max:255',
                 'alamat_wali' => 'nullable|string',
                 'no_telp_wali' => 'nullable|string|max:20',
                 'pekerjaan_wali' => 'nullable|string|max:255',
-                'email' => 'required|email|max:255|unique:registrations',
             ]);
+
+            // Handle file upload
+            if ($request->hasFile('file_kk')) {
+                $kkFile = $request->file('file_kk');
+                $kkName = uniqid('kk_').'.'.$kkFile->getClientOriginalExtension();
+                $kkFile->storeAs('public/kk', $kkName);
+                $validatedData['file_kk'] = $kkName;
+            }
+            if ($request->hasFile('file_akta')) {
+                $aktaFile = $request->file('file_akta');
+                $aktaName = uniqid('akta_').'.'.$aktaFile->getClientOriginalExtension();
+                $aktaFile->storeAs('public/akta', $aktaName);
+                $validatedData['file_akta'] = $aktaName;
+            }
 
             $validatedData['alamat'] = $validatedData['alamat_ortu'] ?? '';
 
@@ -69,7 +86,8 @@ class PendaftaranController extends Controller
             return redirect()->route('pendaftaran', ['step' => 2]);
         }
 
-        elseif ($step === '3') {
+        // FINAL STEP: finish (langsung simpan data dan redirect sukses)
+        elseif ($step === 'finish') {
             if (!$request->session()->has('registration_data') || $request->session()->get('completed_step') < 2) {
                 return redirect()->route('pendaftaran', ['step' => 2])
                     ->withErrors(['error' => 'Silakan lengkapi data pendaftaran terlebih dahulu']);
@@ -78,15 +96,6 @@ class PendaftaranController extends Controller
             // Ambil data pendaftaran dari session
             $registrationData = $request->session()->get('registration_data');
             $jadwal_abk = $request->input('jadwal_abk');
-            if (empty($registrationData['email'])) {
-                return redirect()->route('pendaftaran', ['step' => 2])
-                    ->withErrors(['email' => 'Email wajib diisi dan belum pernah digunakan.']);
-            }
-            if (Registration::where('email', $registrationData['email'])->exists()) {
-                return redirect()->route('pendaftaran', ['step' => 2])
-                    ->withErrors(['email' => 'Email sudah digunakan, silakan gunakan email lain.']);
-            }
-            // Simpan data pendaftaran
             try {
                 \DB::beginTransaction();
                 if (empty($registrationData['alamat']) && !empty($registrationData['alamat_ortu'])) {
@@ -94,6 +103,12 @@ class PendaftaranController extends Controller
                 }
                 $registrationData['jadwal_abk'] = $jadwal_abk;
                 $registrationData['status_lolos'] = false;
+                // Pastikan kolom yang diperlukan ada
+                $registrationData['penghasilan_ayah'] = $registrationData['penghasilan_ayah'] ?? null;
+                $registrationData['penghasilan_ibu'] = $registrationData['penghasilan_ibu'] ?? null;
+                $registrationData['status_pip'] = $registrationData['status_pip'] ?? null;
+                $registrationData['file_kk'] = $registrationData['file_kk'] ?? null;
+                $registrationData['file_akta'] = $registrationData['file_akta'] ?? null;
                 $registration = Registration::create($registrationData);
                 \DB::commit();
                 $request->session()->forget([
@@ -109,6 +124,7 @@ class PendaftaranController extends Controller
                 return redirect()->back()->withErrors('Terjadi kesalahan saat menyimpan data. Silakan coba lagi.');
             }
         }
+        // fallback jika step tidak dikenali
         return redirect()->route('pendaftaran');
     }
 

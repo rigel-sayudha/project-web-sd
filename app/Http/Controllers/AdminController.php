@@ -119,4 +119,11 @@ class AdminController extends Controller
         $filename = 'rekap_siswa_lolos_seleksi.xlsx';
         return Excel::download(new AcceptedRegistrationsExport, $filename);
     }
+    public function printAcceptedRegistrations()
+    {
+        $registrations = Registration::where('status_lolos', 1)->orderBy('nama')->get();
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.print.accepted-registrations', compact('registrations'));
+        $pdf->setPaper('a4', 'landscape');
+        return $pdf->stream('rekap-siswa-lolos.pdf');
+    }
 }

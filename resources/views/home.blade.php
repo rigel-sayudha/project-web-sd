@@ -423,36 +423,22 @@
             <div class="max-w-3xl mx-auto">
                 <div class="bg-white rounded-lg shadow-lg p-6 md:p-8 h-[300px] md:h-[400px] flex flex-col justify-between">
                     <h3 class="text-xl md:text-2xl font-semibold text-gray-800 mb-6">Kotak Saran</h3>
-                    <form action="{{ route('contact.store') }}" method="POST" class="space-y-6">
+                    <form action="{{ route('kotak-saran.store') }}" method="POST" class="space-y-6">
                         @csrf
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="name" class="block text-gray-700 font-medium mb-2">Nama Lengkap</label>
-                                <input type="text" id="name" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent" required>
-                            </div>
-                            <div>
-                                <label for="email" class="block text-gray-700 font-medium mb-2">Email</label>
-                                <input type="email" id="email" name="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent" required>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="phone" class="block text-gray-700 font-medium mb-2">No. Telepon</label>
-                                <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent" required>
-                            </div>
-                            <div>
-                                <label for="subject" class="block text-gray-700 font-medium mb-2">Subjek</label>
-                                <input type="text" id="subject" name="subject" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent" required>
-                            </div>
+                        <div class="mb-4">
+                            <label for="nama" class="block text-gray-700 font-medium mb-2">Nama (opsional)</label>
+                            <input type="text" id="nama" name="nama" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent">
                         </div>
                         <div class="mb-6">
-                            <label for="message" class="block text-gray-700 font-medium mb-2">Pesan</label>
-                            <textarea id="message" name="message" rows="6" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent" required></textarea>
+                            <label for="message" class="block text-gray-700 font-medium mb-2">Saran / Pesan</label>
+                            <textarea id="message" name="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent" required></textarea>
                         </div>
                         <div class="text-right">
                             <button type="submit" class="px-6 py-3 font-semibold rounded-lg transition duration-300" style="background-color:#0f8941;color:#fff;">Kirim</button>
                         </div>
                     </form>
+
+                    <!-- Saran terbaru dihapus dari halaman home -->
                 </div>
             </div>
         </div>

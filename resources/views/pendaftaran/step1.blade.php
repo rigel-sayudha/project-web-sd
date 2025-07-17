@@ -1,5 +1,5 @@
 <!-- Step 1: Form Data Diri -->
-<form action="{{ route('pendaftaran.store') }}?step=2" method="POST" class="space-y-8">
+<form action="{{ route('pendaftaran.store') }}?step=2" method="POST" class="space-y-8" enctype="multipart/form-data">
     @csrf
     <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 hover-card fade-in">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6 flex items-center">
@@ -20,10 +20,7 @@
                     <input type="date" id="tanggal_lahir" name="tanggal_lahir" placeholder="Tanggal Lahir" class="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent" required>
                 </div>
             </div>
-            <div>
-                <label class="block text-gray-700 font-medium mb-2" for="email">Email</label>
-                <input type="email" id="email" name="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent" required>
-            </div>
+            <!-- Email siswa dihapus -->
             <div>
                 <label class="block text-gray-700 font-medium mb-2" for="jenis_kelamin">Jenis Kelamin</label>
                 <div class="flex space-x-4">
@@ -49,13 +46,20 @@
                     <option value="Konghucu">Konghucu</option>
                 </select>
             </div>
-            <div>
-                <label class="block text-gray-700 font-medium mb-2" for="no_telp">No. Telepon</label>
-                <input type="tel" id="no_telp" name="no_telp" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent" required>
-            </div>
+            <!-- No. Telepon siswa dihapus -->
             <div>
                 <label class="block text-gray-700 font-medium mb-2" for="asal_sekolah">Asal Sekolah</label>
                 <input type="text" id="asal_sekolah" name="asal_sekolah" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent" required>
+            </div>
+            <div>
+                <label class="block text-gray-700 font-medium mb-2" for="file_kk">Upload Kartu Keluarga (KK) <span class="text-red-500">*</span></label>
+                <input type="file" id="file_kk" name="file_kk" accept=".jpg,.jpeg,.png,.pdf" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white" required>
+                <span class="text-xs text-gray-500">Format: JPG, PNG, atau PDF. Maksimal 2MB.</span>
+            </div>
+            <div>
+                <label class="block text-gray-700 font-medium mb-2" for="file_akta">Upload Akta Kelahiran <span class="text-red-500">*</span></label>
+                <input type="file" id="file_akta" name="file_akta" accept=".jpg,.jpeg,.png,.pdf" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent bg-white" required>
+                <span class="text-xs text-gray-500">Format: JPG, PNG, atau PDF. Maksimal 2MB.</span>
             </div>
         </div>
     </div>
@@ -83,7 +87,8 @@
             </div>
             <div>
                 <label class="block text-gray-700 font-medium mb-2" for="telepon_ortu">Telepon Orang Tua</label>
-                <input type="tel" id="telepon_ortu" name="telepon_ortu" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent" required>
+                <input type="tel" id="telepon_ortu" name="telepon_ortu" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent" required pattern="[0-9+\-() ]+" maxlength="20">
+                <span class="text-xs text-gray-500">Contoh: 08123456789</span>
             </div>
             <div>
                 <label class="block text-gray-700 font-medium mb-2" for="pekerjaan_ayah">Pekerjaan Ayah</label>
@@ -93,6 +98,16 @@
                     <option value="Wiraswasta">Wiraswasta</option>
                     <option value="Buruh">Buruh</option>
                     <option value="PNS/TNI/POLRI">PNS/TNI/POLRI</option>
+                </select>
+            </div>
+                  <div>
+                <label class="block text-gray-700 font-medium mb-2" for="penghasilan_ayah">Penghasilan Ayah (per bulan)</label>
+                <select id="penghasilan_ayah" name="penghasilan_ayah" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent" required>
+                    <option value="">Pilih Penghasilan</option>
+                    <option value="<1.000.000">< 1.000.000</option>
+                    <option value="1.000.000-1.999.999">1.000.000 - 1.999.999</option>
+                    <option value="2.000.000-4.999.999">2.000.000 - 4.999.999</option>
+                    <option value=">=5.000.000">&ge; 5.000.000</option>
                 </select>
             </div>
             <div>
@@ -107,14 +122,19 @@
                 </select>
             </div>
             <div>
-                <label class="block text-gray-700 font-medium mb-2" for="pendapatan_ortu">Pendapatan Orang Tua (per bulan)</label>
-                <select id="pendapatan_ortu" name="pendapatan_ortu" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent" required>
-                    <option value="">Pilih Pendapatan</option>
+                <label class="block text-gray-700 font-medium mb-2" for="penghasilan_ibu">Penghasilan Ibu (per bulan)</label>
+                <select id="penghasilan_ibu" name="penghasilan_ibu" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent" required>
+                    <option value="">Pilih Penghasilan</option>
                     <option value="<1.000.000">< 1.000.000</option>
                     <option value="1.000.000-1.999.999">1.000.000 - 1.999.999</option>
                     <option value="2.000.000-4.999.999">2.000.000 - 4.999.999</option>
-                    <option value=">=5.000.000">>= 5.000.000</option>
+                    <option value=">=5.000.000">&ge; 5.000.000</option>
                 </select>
+            </div>
+            <div>
+                <label class="block text-gray-700 font-medium mb-2" for="status_pip">Status Rekomendasi PIP</label>
+                <input type="text" id="status_pip" name="status_pip" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed" readonly placeholder="Akan terisi otomatis" />
+                <span class="text-xs text-gray-500">Y = Direkomendasikan, N = Tidak Direkomendasikan</span>
             </div>
         </div>
     </div>
@@ -214,5 +234,25 @@
                 document.getElementById('usia').value = '';
             }
         });
+
+        function updateStatusPIP() {
+            const penghasilanAyah = document.getElementById('penghasilan_ayah').value;
+            const penghasilanIbu = document.getElementById('penghasilan_ibu').value;
+            let status = '';
+            // Tidak ada penghasilan jika <1.000.000
+            const ayahTidakAda = penghasilanAyah === '<1.000.000' || penghasilanAyah === '';
+            const ibuTidakAda = penghasilanIbu === '<1.000.000' || penghasilanIbu === '';
+            if ((ayahTidakAda && !ibuTidakAda) || (!ayahTidakAda && ibuTidakAda)) {
+                status = 'Y';
+            } else if (!ayahTidakAda && !ibuTidakAda) {
+                status = 'N';
+            } else {
+                status = 'Y';
+            }
+            document.getElementById('status_pip').value = status;
+        }
+        document.getElementById('penghasilan_ayah').addEventListener('change', updateStatusPIP);
+        document.getElementById('penghasilan_ibu').addEventListener('change', updateStatusPIP);
+        updateStatusPIP();
     });
 </script>

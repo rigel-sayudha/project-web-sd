@@ -64,19 +64,17 @@
                     </svg>
                 </button>
             </div>
-            
             <nav class="mt-8 px-4 flex flex-col gap-2" id="sidebarMenu">
-                <a href="{{ route('admin.ekstrakurikuler.index') }}" class="sidebar-nav-btn{{ request()->routeIs('admin.ekstrakurikuler.*') ? ' active' : '' }}">Ekstrakurikuler</a>
-                {{-- <a href="{{ route('admin.artikel.index') }}" class="sidebar-nav-btn{{ request()->routeIs('admin.artikel.*') ? ' active' : '' }}">Artikel</a> --}}
-                <a href="/admin/organization" class="sidebar-nav-btn">Struktur Organisasi</a>
-                <a href="/admin/leaderboard" class="sidebar-nav-btn">Pendaftaran Siswa Baru</a>
-                <a href="{{ route('admin.poster.index') }}" class="sidebar-nav-btn{{ request()->routeIs('admin.poster.*') ? ' active' : '' }}">Banner Iklan</a>
-                <a href="{{ route('admin.sambutan.index') }}" class="sidebar-nav-btn">Sambutan</a>
-                <a href="{{ route('admin.galeri.index') }}" class="sidebar-nav-btn{{ request()->routeIs('admin.galeri.*') ? ' active' : '' }}">Galeri Sekolah</a>
+                <a href="{{ route('admin.ekstrakurikuler.index') }}" class="sidebar-nav-btn{{ request()->routeIs('admin.ekstrakurikuler.*') ? ' active' : '' }}" onclick="closeSidebarOnMobile()">Ekstrakurikuler</a>
+                <a href="/admin/organization" class="sidebar-nav-btn" onclick="closeSidebarOnMobile()">Struktur Organisasi</a>
+                <a href="/admin/leaderboard" class="sidebar-nav-btn" onclick="closeSidebarOnMobile()">Pendaftaran Siswa Baru</a>
+                <a href="{{ route('admin.kotak-saran') }}" class="sidebar-nav-btn{{ request()->routeIs('admin.kotak-saran') ? ' active' : '' }}" onclick="closeSidebarOnMobile()">Kotak Saran</a>
+                <a href="{{ route('admin.poster.index') }}" class="sidebar-nav-btn{{ request()->routeIs('admin.poster.*') ? ' active' : '' }}" onclick="closeSidebarOnMobile()">Banner Iklan</a>
+                <a href="{{ route('admin.sambutan.index') }}" class="sidebar-nav-btn" onclick="closeSidebarOnMobile()">Sambutan</a>
+                <a href="{{ route('admin.galeri.index') }}" class="sidebar-nav-btn{{ request()->routeIs('admin.galeri.*') ? ' active' : '' }}" onclick="closeSidebarOnMobile()">Galeri Sekolah</a>
             </nav>
         </div>
 
-        <!-- Main Content -->
         <div id="mainContent" class="flex-1 md:ml-64 transition-all duration-300">
             <!-- Top Navigation -->
             <header class="bg-white shadow-sm sticky top-0 z-10">
@@ -250,6 +248,12 @@
                 notifDropdown.classList.add('pointer-events-none');
             }
         });
+
+        function closeSidebarOnMobile() {
+            if(window.innerWidth < 768) {
+                toggleSidebar();
+            }
+        }
     </script>
     @stack('scripts')
 </body>

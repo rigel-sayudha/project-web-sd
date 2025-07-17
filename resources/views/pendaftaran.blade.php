@@ -99,8 +99,6 @@
                     @include('pendaftaran.step1')
                 @elseif($step == 2)
                     @include('pendaftaran.step2')
-                @elseif($step == 3 || $step == 'finish')
-                    @include('pendaftaran.step3')
                 @endif
             </div>
         @endif

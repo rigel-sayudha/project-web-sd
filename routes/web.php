@@ -32,6 +32,8 @@ Route::post('/admin/logout', [LoginController::class, 'logout'])->name('logout')
 
 // Admin routes with auth middleware
 Route::middleware(['auth'])->prefix('admin')->group(function () {
+    // Kotak Saran Admin
+    Route::get('/kotak-saran', [\App\Http\Controllers\Admin\KotakSaranAdminController::class, 'index'])->name('admin.kotak-saran');
     // Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard'); // Hapus/komentar dashboard
     Route::get('/', [AdminController::class, 'articles'])->name('admin.home'); // Default ke berita
 
@@ -87,11 +89,13 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::resource('galeri', \App\Http\Controllers\Admin\GaleriController::class, [
         'as' => 'admin'
     ]);
+
+    Route::get('/print-accepted-registrations', [App\Http\Controllers\AdminController::class, 'printAcceptedRegistrations'])->name('admin.printAcceptedRegistrations');
 });
 
 // Registration route
 Route::post('/register', [RegistrationController::class, 'store'])->name('register.store');
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::post('/kotak-saran', [App\Http\Controllers\KotakSaranController::class, 'store'])->name('kotak-saran.store');
 
 // Struktur Organisasi route
 Route::get('/struktur-organisasi', [StrukturOrganisasiController::class, 'index'])->name('struktur-organisasi');
