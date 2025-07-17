@@ -1,6 +1,6 @@
 # Profile Sekolah
 
-Aplikasi web profile sekolah dengan fitur pendaftaran siswa dan sistem poin berbasis Laravel.
+Aplikasi web profile sekolah dengan fitur pendaftaran siswa berbasis Laravel.
 
 ## Fitur
 
