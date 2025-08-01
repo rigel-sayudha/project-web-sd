@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -51,6 +52,9 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/registrations', [AdminController::class, 'registrations'])->name('admin.registrations');
     Route::get('/organization', [AdminController::class, 'organization'])->name('admin.organization');
     Route::get('/leaderboard', [AdminController::class, 'leaderboard'])->name('admin.leaderboard');
+    // Edit nilai tes siswa (harus di dalam group agar prefix 'admin.' aktif)
+    Route::get('/registrations/{id}/edit-tes', [AdminController::class, 'editTes'])->name('admin.editTes');
+    Route::put('/registrations/{id}/update-tes', [AdminController::class, 'updateTes'])->name('admin.updateTes');
     Route::get('/print-registration/{id}', [AdminController::class, 'printRegistration'])->name('admin.printRegistration');
     Route::get('/leaderboard/export', [AdminController::class, 'exportAcceptedRegistrations'])->name('admin.leaderboard.export');
     Route::post('/loloskan/{id}', [AdminController::class, 'loloskanSiswa'])->name('admin.loloskan');
@@ -91,6 +95,11 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     ]);
 
     Route::get('/print-accepted-registrations', [App\Http\Controllers\AdminController::class, 'printAcceptedRegistrations'])->name('admin.printAcceptedRegistrations');
+
+    // Hapus satu data siswa
+    Route::delete('/registrations/{id}', [App\Http\Controllers\AdminController::class, 'deleteRegistration'])->name('admin.registrations.destroy');
+    // Hapus semua data siswa
+    Route::delete('/registrations', [App\Http\Controllers\AdminController::class, 'deleteAllRegistrations'])->name('admin.registrations.deleteAll');
 });
 
 // Registration route

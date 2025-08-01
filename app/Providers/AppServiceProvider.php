@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        \View::composer('partial.footer', function ($view) {
+            $beritaSekolah = \App\Models\Article::where('status', 'published')->orderBy('created_at', 'desc')->take(4)->get();
+            $view->with('beritaSekolah', $beritaSekolah);
+        });
     }
 }

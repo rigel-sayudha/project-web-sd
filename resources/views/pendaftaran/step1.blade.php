@@ -235,19 +235,24 @@
             }
         });
 
+        function getPoin(penghasilan) {
+            if (penghasilan === '<1.000.000') return 0;
+            if (penghasilan === '1.000.000-1.999.999') return 1;
+            if (penghasilan === '2.000.000-4.999.999') return 2;
+            if (penghasilan === '>=5.000.000' || penghasilan === '>=5.000.000') return 3;
+            return 0;
+        }
         function updateStatusPIP() {
             const penghasilanAyah = document.getElementById('penghasilan_ayah').value;
             const penghasilanIbu = document.getElementById('penghasilan_ibu').value;
+            const poinAyah = getPoin(penghasilanAyah);
+            const poinIbu = getPoin(penghasilanIbu);
+            const totalPoin = poinAyah + poinIbu;
             let status = '';
-            // Tidak ada penghasilan jika <1.000.000
-            const ayahTidakAda = penghasilanAyah === '<1.000.000' || penghasilanAyah === '';
-            const ibuTidakAda = penghasilanIbu === '<1.000.000' || penghasilanIbu === '';
-            if ((ayahTidakAda && !ibuTidakAda) || (!ayahTidakAda && ibuTidakAda)) {
+            if (totalPoin <= 1) {
                 status = 'Y';
-            } else if (!ayahTidakAda && !ibuTidakAda) {
-                status = 'N';
             } else {
-                status = 'Y';
+                status = 'N';
             }
             document.getElementById('status_pip').value = status;
         }

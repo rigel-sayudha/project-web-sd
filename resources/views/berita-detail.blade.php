@@ -51,7 +51,6 @@
             }
             </script>
 
-            <!-- Recent Articles -->
             <div class="border-t pt-8">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6">Berita Terkait</h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

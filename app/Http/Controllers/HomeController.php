@@ -19,6 +19,8 @@ class HomeController extends BaseController
             ->orderBy('total_points', 'desc')
             ->get();
 
-        return view('home', compact('articles', 'ekstrakurikulers', 'acceptedRegistrations'));
+        $beritaSekolah = Article::where('status', 'published')->orderBy('created_at', 'desc')->take(4)->get();
+
+        return view('home', compact('articles', 'ekstrakurikulers', 'acceptedRegistrations', 'beritaSekolah'));
     }
 }

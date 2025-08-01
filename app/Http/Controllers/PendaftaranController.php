@@ -12,23 +12,19 @@ class PendaftaranController extends Controller
 {
     public function index()
     {
-        $now = Carbon::now();
-        $startDate = Carbon::create(2025, 5, 15);
-        $endDate = Carbon::create(2025, 7, 30);
-        
-        $is_open = $now->between($startDate, $endDate);
-        
         $step = request()->query('step', 1);
         
         $questions = Question::all();
-        return view('pendaftaran', compact('is_open', 'step', 'questions'));
+        return view('pendaftaran', compact('step', 'questions'));
     }
 
     public function store(Request $request)
     {
+
         $step = $request->query('step');
 
-        if ($step === '2') {
+        // Step 1: Simpan data ke database dengan status draft
+        if ($step == 2) {
             $validatedData = $request->validate([
                 'nama' => 'required|string|max:255',
                 'tempat_lahir' => 'required|string|max:255',
@@ -71,58 +67,28 @@ class PendaftaranController extends Controller
             }
 
             $validatedData['alamat'] = $validatedData['alamat_ortu'] ?? '';
+            $validatedData['status_lolos'] = false;
+            $validatedData['status'] = 'draft';
 
-            \Log::debug('Step2 Validated Data', $validatedData);
+            $registration = Registration::create($validatedData);
 
-            $request->session()->put('registration_data', $validatedData);
-            $request->session()->put('completed_step', 2);
-
-            \Log::debug('Step2 Session', [
-                'registration_data' => $request->session()->get('registration_data'),
-                'completed_step' => $request->session()->get('completed_step'),
-            ]);
-
-            // Redirect ke halaman jadwal tes (step 2)
-            return redirect()->route('pendaftaran', ['step' => 2]);
+            // Redirect ke step 2 dengan id pendaftaran
+            return redirect()->route('pendaftaran', ['step' => 2, 'id' => $registration->id]);
         }
 
         // FINAL STEP: finish (langsung simpan data dan redirect sukses)
         elseif ($step === 'finish') {
-            if (!$request->session()->has('registration_data') || $request->session()->get('completed_step') < 2) {
-                return redirect()->route('pendaftaran', ['step' => 2])
-                    ->withErrors(['error' => 'Silakan lengkapi data pendaftaran terlebih dahulu']);
-            }
-
-            // Ambil data pendaftaran dari session
-            $registrationData = $request->session()->get('registration_data');
+            $id = $request->query('id');
             $jadwal_abk = $request->input('jadwal_abk');
-            try {
-                \DB::beginTransaction();
-                if (empty($registrationData['alamat']) && !empty($registrationData['alamat_ortu'])) {
-                    $registrationData['alamat'] = $registrationData['alamat_ortu'];
-                }
-                $registrationData['jadwal_abk'] = $jadwal_abk;
-                $registrationData['status_lolos'] = false;
-                // Pastikan kolom yang diperlukan ada
-                $registrationData['penghasilan_ayah'] = $registrationData['penghasilan_ayah'] ?? null;
-                $registrationData['penghasilan_ibu'] = $registrationData['penghasilan_ibu'] ?? null;
-                $registrationData['status_pip'] = $registrationData['status_pip'] ?? null;
-                $registrationData['file_kk'] = $registrationData['file_kk'] ?? null;
-                $registrationData['file_akta'] = $registrationData['file_akta'] ?? null;
-                $registration = Registration::create($registrationData);
-                \DB::commit();
-                $request->session()->forget([
-                    'registration_data',
-                    'exam_score',
-                    'answers',
-                    'completed_step'
-                ]);
-                return redirect()->route('pendaftaran.success');
-            } catch (\Exception $e) {
-                \DB::rollback();
-                \Log::error('Error saving registration: ' . $e->getMessage());
-                return redirect()->back()->withErrors('Terjadi kesalahan saat menyimpan data. Silakan coba lagi.');
+            $registration = Registration::find($id);
+            if (!$registration || $registration->status !== 'draft') {
+                return redirect()->route('pendaftaran', ['step' => 1])
+                    ->withErrors(['error' => 'Data pendaftaran tidak ditemukan, silakan isi data diri terlebih dahulu.']);
             }
+            $registration->jadwal_abk = $jadwal_abk;
+            $registration->status = 'final';
+            $registration->save();
+            return redirect()->route('pendaftaran.success');
         }
         // fallback jika step tidak dikenali
         return redirect()->route('pendaftaran');

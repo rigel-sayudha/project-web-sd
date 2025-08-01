@@ -27,37 +27,23 @@
                 </div>
             </div>
 
-            <div class="space-y-6">
-                <h4 class="text-lg font-semibold">Informasi Sekolah</h4>
-                <div class="space-y-4">
-                    <article class="pb-4 border-b border-gray-700">
-                        <h5 class="text-sm font-medium mb-2">Prestasi Gemilang Tim Olimpiade</h5>
-                        <p class="text-sm text-gray-400">Tim Olimpiade Matematika berhasil meraih medali emas dalam kompetisi tingkat nasional...</p>
-                        <a href="#" class="text-blue-400 text-sm hover:text-blue-300 mt-2 inline-block">Selengkapnya →</a>
-                    </article>
-                    <article class="pb-4 border-b border-gray-700">
-                        <h5 class="text-sm font-medium mb-2">Festival Seni dan Budaya 2025</h5>
-                        <p class="text-sm text-gray-400">Pameran karya seni dan pertunjukan budaya akan diselenggarakan pada bulan Juli mendatang...</p>
-                        <a href="#" class="text-blue-400 text-sm hover:text-blue-300 mt-2 inline-block">Selengkapnya →</a>
-                    </article>
+            <div class="md:col-span-2">
+                <h4 class="text-lg font-semibold mb-4">Berita Sekolah Terbaru</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    @foreach(($beritaSekolah ?? []) as $i => $berita)
+                        @if($i < 4)
+                        <article class="pb-4 border-b border-gray-700">
+                            <h5 class="text-sm font-medium mb-2">{{ $berita->judul }}</h5>
+                            <p class="text-sm text-gray-400">{{ \Illuminate\Support\Str::limit(strip_tags($berita->konten), 100) }}</p>
+                            <a href="{{ route('berita.show', $berita->slug) }}" class="text-blue-400 text-sm hover:text-blue-300 mt-2 inline-block">Selengkapnya →</a>
+                        </article>
+                        @endif
+                    @endforeach
+                    @if(empty($beritaSekolah) || count($beritaSekolah) == 0)
+                        <div class="text-gray-400 col-span-2">Belum ada berita sekolah yang dipublikasikan.</div>
+                    @endif
                 </div>
             </div>
-
-            <div class="space-y-6">
-                <h4 class="text-lg font-semibold">Agenda Sekolah</h4>
-                <div class="space-y-4">
-                    <article class="pb-4 border-b border-gray-700">
-                        <h5 class="text-sm font-medium mb-2">Prestasi Gemilang Tim Olimpiade</h5>
-                        <p class="text-sm text-gray-400">Tim Olimpiade Matematika berhasil meraih medali emas dalam kompetisi tingkat nasional...</p>
-                        <a href="#" class="text-blue-400 text-sm hover:text-blue-300 mt-2 inline-block">Selengkapnya →</a>
-                    </article>
-                    <article class="pb-4 border-b border-gray-700">
-                        <h5 class="text-sm font-medium mb-2">Festival Seni dan Budaya 2025</h5>
-                        <p class="text-sm text-gray-400">Pameran karya seni dan pertunjukan budaya akan diselenggarakan pada bulan Juli mendatang...</p>
-                        <a href="#" class="text-blue-400 text-sm hover:text-blue-300 mt-2 inline-block">Selengkapnya →</a>
-                    </article>
-                </div>
-                </div>
             </div>
         </div>
 

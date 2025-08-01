@@ -31,6 +31,8 @@
                 <th>Jenis Kelamin</th>
                 <th>Pekerjaan Ayah</th>
                 <th>Pekerjaan Ibu</th>
+                <th>Penghasilan Ayah</th>
+                <th>Penghasilan Ibu</th>
                 <th>Alamat</th>
                 <!-- <th>No. Telp</th> -->
             </tr>
@@ -46,6 +48,8 @@
                 <td>{{ $reg->jenis_kelamin }}</td>
                 <td>{{ $reg->pekerjaan_ayah }}</td>
                 <td>{{ $reg->pekerjaan_ibu }}</td>
+                <td>{{ $reg->penghasilan_ayah }}</td>
+                <td>{{ $reg->penghasilan_ibu }}</td>
                 <td>{{ $reg->alamat }}</td>
                 <!-- <td>{{ $reg->no_telp }}</td> -->
             </tr>

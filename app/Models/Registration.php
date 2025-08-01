@@ -33,5 +33,10 @@ class Registration extends Model
         'alamat_wali',
         'no_telp_wali',
         'pekerjaan_wali',
+        'tes_warna',
+        'interaksi',
+        'tes_baca_tulis',
+        'abk',
+        'total_poin',
     ];
 }

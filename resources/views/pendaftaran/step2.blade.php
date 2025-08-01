@@ -1,6 +1,25 @@
+@php
+    $id = request()->query('id');
+    $registration = null;
+    if ($id) {
+        $registration = \App\Models\Registration::find($id);
+    }
+    $hasDraft = $registration && $registration->status === 'draft';
+@endphp
 <div class="bg-white p-8 rounded-xl shadow-lg">
+    @if(!$hasDraft)
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+            <strong>Data pendaftaran belum lengkap.</strong> Silakan isi data diri terlebih dahulu.<br>
+            Anda akan diarahkan ke Step 1 dalam 3 detik...
+        </div>
+        <script>
+            setTimeout(function() {
+                window.location.href = "{{ route('pendaftaran') }}?step=1";
+            }, 3000);
+        </script>
+    @endif
     <h1 class="text-3xl font-bold text-gray-800 mb-8 text-center">Penjadwalan Tes Anak Berkebutuhan Khusus (ABK)</h1>
-    <form action="{{ route('pendaftaran.store') }}?step=finish" method="POST" class="space-y-8">
+    <form action="{{ route('pendaftaran.store') }}?step=finish&id={{ $id }}" method="POST" class="space-y-8" @if(!$hasDraft) style="pointer-events:none;opacity:0.5;" @endif>
         @csrf
         <div class="bg-gray-50 p-6 rounded-lg">
             <p class="text-lg font-semibold text-gray-800 mb-4">Silakan pilih jadwal tes untuk anak berkebutuhan khusus (ABK):</p>
@@ -8,6 +27,7 @@
                 @php
                     use App\Models\Registration;
                     $days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
+                    $maxQuotaPerDay = 20; // Maximum quota per day
                     $jadwalTes = [];
                     $now = strtotime(date('Y-m-d'));
                     $currentDay = date('N', $now);
@@ -34,15 +54,29 @@
                 @foreach($jadwalTes as $jadwal)
                     @php
                         $jadwalKey = $jadwal['hari'].', '.$jadwal['tanggal'].' | '.$jadwal['waktu'];
-                        $isFull = ($jadwalCounts[$jadwalKey] ?? 0) >= 20;
+                        $currentCount = $jadwalCounts[$jadwalKey] ?? 0;
+                        $isFull = $currentCount >= $maxQuotaPerDay;
+                        $remainingSlots = $maxQuotaPerDay - $currentCount;
                     @endphp
                     <label class="flex items-center p-4 rounded-lg transition cursor-pointer {{ $isFull ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-white hover:bg-green-50' }}">
                         <input type="radio" name="jadwal_abk" value="{{ $jadwalKey }}" class="form-radio text-green-600" required {{ $isFull ? 'disabled' : '' }}>
-                        <span class="ml-2">{{ $jadwalKey }}
-                            @if($isFull)
-                                <span class="ml-2 text-xs text-red-500">(Penuh)</span>
+                        <div class="ml-2 flex-grow">
+                            <div class="flex justify-between items-center">
+                                <span>{{ $jadwalKey }}</span>
+                                <span class="text-sm {{ $remainingSlots <= 2 ? 'text-red-500' : 'text-green-600' }}">
+                                    @if($isFull)
+                                        <span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded">Kuota Penuh</span>
+                                    @else
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                                            Sisa Kuota: {{ $remainingSlots }} dari {{ $maxQuotaPerDay }}
+                                        </span>
+                                    @endif
+                                </span>
+                            </div>
+                            @if($remainingSlots <= 2 && !$isFull)
+                                <p class="text-xs text-amber-600 mt-1">Kuota hampir penuh! Segera pilih jadwal ini.</p>
                             @endif
-                        </span>
+                        </div>
                     </label>
                 @endforeach
             </div>

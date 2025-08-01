@@ -47,8 +47,9 @@ class AdminController extends Controller
 
     public function leaderboard(Request $request)
     {
-        $registrations = Registration::orderBy('created_at', 'desc')->get();
-        return view('admin.leaderboard', compact('registrations'));
+        $sort = $request->get('sort', 'desc');
+        $registrations = Registration::orderBy('total_poin', $sort)->get();
+        return view('admin.leaderboard', compact('registrations', 'sort'));
     }
 
     public function articles()
@@ -125,5 +126,42 @@ class AdminController extends Controller
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.print.accepted-registrations', compact('registrations'));
         $pdf->setPaper('a4', 'landscape');
         return $pdf->stream('rekap-siswa-lolos.pdf');
+    }
+
+    // Hapus satu data siswa
+    public function deleteRegistration($id)
+    {
+        $registration = Registration::findOrFail($id);
+        $registration->delete();
+        return redirect()->back()->with('success', 'Data siswa berhasil dihapus.');
+    }
+
+    // Hapus semua data siswa
+    public function deleteAllRegistrations()
+    {
+        Registration::truncate();
+        return redirect()->back()->with('success', 'Semua data siswa berhasil dihapus.');
+    }
+
+    // Tampilkan form edit nilai tes
+    public function editTes($id)
+    {
+        $registration = Registration::findOrFail($id);
+        return view('admin.edit-tes', compact('registration'));
+    }
+
+    // Update nilai tes
+    public function updateTes(Request $request, $id)
+    {
+        $registration = Registration::findOrFail($id);
+        $validated = $request->validate([
+            'tes_warna' => 'required|integer|min:0',
+            'interaksi' => 'required|integer|min:0',
+            'tes_baca_tulis' => 'required|integer|min:0',
+            'abk' => 'required|integer|min:0',
+        ]);
+        $validated['total_poin'] = $validated['tes_warna'] + $validated['interaksi'] + $validated['tes_baca_tulis'] + $validated['abk'];
+        $registration->update($validated);
+        return redirect()->route('admin.leaderboard')->with('success', 'Nilai tes berhasil diperbarui.');
     }
 }

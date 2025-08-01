@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" href="/images/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     @stack('styles')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         @media (max-width: 768px) {
             .sidebar-open {
@@ -57,7 +58,6 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                     </svg>
                 </button>
-                <!-- Minimize Sidebar Button (Desktop Only) -->
                 <button id="minimizeSidebarBtn" onclick="minimizeSidebar()" class="absolute -right-4 top-1/2 transform -translate-y-1/2 text-white rounded-full shadow p-1 hidden md:inline-flex z-40 border" style="background-color:#0f8941;border-color:#0c6c33;" title="Minimize Sidebar" style="right:-20px;">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
@@ -254,6 +254,24 @@
                 toggleSidebar();
             }
         }
+    </script>
+    <script>
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#0f8941',
+            });
+        @endif
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: '{{ session('error') }}',
+                confirmButtonColor: '#d33',
+            });
+        @endif
     </script>
     @stack('scripts')
 </body>

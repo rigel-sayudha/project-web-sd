@@ -33,7 +33,6 @@ class SambutanController extends Controller
             $validated['foto'] = $request->file('foto')->store('sambutan', 'public');
         }
 
-        // Jika status published, set semua sambutan lain menjadi draft
         if ($validated['status'] === 'published') {
             Sambutan::where('status', 'published')->update(['status' => 'draft']);
         }

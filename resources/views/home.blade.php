@@ -45,7 +45,6 @@
     </style>
 </head>
 <body class="overflow-x-hidden">
-    <!-- Poster Pop-up (Iklan) hanya gambar -->
     @php
         $poster = \App\Models\Poster::where('status', 'published')->latest()->first();
     @endphp
@@ -59,6 +58,28 @@
     @endif
 
     @include('partial.navbar')
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Fallback: jika partial.navbar tidak bisa diubah, tambahkan link secara paksa ke menu mobile
+        var mobileNav = document.querySelector('.mobile-nav ul, .mobile-navbar ul, #mobile-navbar ul, .navbar-mobile ul, nav ul');
+        if (mobileNav && !mobileNav.querySelector('.hasil-seleksi-link')) {
+            var li = document.createElement('li');
+            li.className = 'hasil-seleksi-link';
+            var a = document.createElement('a');
+            a.href = "{{ route('hasil-seleksi') }}";
+            a.textContent = 'Hasil Seleksi';
+            a.className = 'block px-4 py-2 text-gray-700 hover:bg-gray-100';
+            li.appendChild(a);
+            // Selipkan setelah link Pendaftaran jika ada
+            var daftar = mobileNav.querySelector('a[href*="pendaftaran"]');
+            if (daftar && daftar.parentElement.nextElementSibling) {
+                daftar.parentElement.parentNode.insertBefore(li, daftar.parentElement.nextElementSibling);
+            } else {
+                mobileNav.appendChild(li);
+            }
+        }
+    });
+    </script>
 
     @include('partial.carousel')
 
@@ -215,40 +236,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Accepted Students Section -->
-    <section id="accepted-students" class="py-12 md:py-16 bg-white">
-        <div class="container mx-auto px-4">
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-8 text-center">Daftar Siswa yang Lolos Seleksi</h2>
-            @if($acceptedRegistrations->count())
-            <div class="overflow-x-auto">
-                <table class="min-w-full border border-gray-200">
-                    <thead>
-                        <tr class="text-white" style="background-color:#0f8941;">
-                            <th class="py-3 px-6 text-left">Peringkat</th>
-                            <th class="py-3 px-6 text-left">Nama Siswa</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php $rank = 1; @endphp
-                        @foreach($acceptedRegistrations as $registrationPoint)
-                        <tr class="{{ $rank % 2 == 1 ? 'bg-white' : 'bg-gray-50' }} hover:bg-gray-100">
-                            <td class="py-3 px-6">{{ $rank }}</td>
-                            <td class="py-3 px-6">{{ $registrationPoint->registration->nama ?? 'N/A' }}</td>
-                        </tr>
-                        @php $rank++; @endphp
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <div class="text-center mt-6">
-                <a href="{{ url('hasil-seleksi') }}" class="inline-block px-6 py-3 font-semibold rounded-lg transition duration-300" style="background-color:#0f8941;color:#fff;">Hasil Seleksi</a>
-            </div>
-            @else
-            <p class="text-center text-gray-600">Belum ada siswa yang lolos seleksi.</p>
-            @endif
         </div>
     </section>
 
@@ -445,7 +432,18 @@
     </section>
 
     @include('partial.footer')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // SweetAlert untuk notifikasi kotak saran
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Terima kasih!',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#0f8941',
+            });
+        @endif
+
         // Poster pop-up logic
         document.addEventListener('DOMContentLoaded', function() {
             var popup = document.getElementById('popup-poster');

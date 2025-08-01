@@ -205,6 +205,9 @@
                 <a href="{{ url('/pendaftaran') }}" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-500 transition-colors duration-200">
                     Pendaftaran
                 </a>
+                <a href="{{ url('/hasil-seleksi') }}" class="block px-4 py-3 text-gray-700 hover:bg-yellow-100 hover:text-yellow-700 font-semibold transition-colors duration-200">
+                    Hasil Seleksi
+                </a>
                 <a href="{{ url('/') }}#contact" class="block px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-500 transition-colors duration-200">
                     Kontak
                 </a>
@@ -267,14 +270,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     navbar.classList.remove('navbar-solid');
                 }
             } catch (error) {
-                // If any error occurs, ensure navbar is solid
+
                 navbar.classList.remove('navbar-transparent');
                 navbar.classList.add('navbar-solid');
             }
         });
     }
 
-    // Mobile submenu toggle with animation
     window.toggleMobileSubmenu = function(id) {
         const submenu = document.getElementById(id);
         const button = event.currentTarget;

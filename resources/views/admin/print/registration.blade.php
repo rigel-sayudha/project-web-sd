@@ -21,14 +21,14 @@
     </div>
     <div class="box">
         <div class="row"><span class="label">Nama Lengkap:</span> <span class="value">{{ $registration->nama }}</span></div>
-        <div class="row"><span class="label">Email:</span> <span class="value">{{ $registration->email }}</span></div>
         <div class="row"><span class="label">Jadwal Tes ABK:</span> <span class="value">{{ $registration->jadwal_abk }}</span></div>
         <div class="row"><span class="label">Tanggal Lahir:</span> <span class="value">{{ $registration->tanggal_lahir }}</span></div>
         <div class="row"><span class="label">Jenis Kelamin:</span> <span class="value">{{ $registration->jenis_kelamin }}</span></div>
         <div class="row"><span class="label">Pekerjaan Ayah:</span> <span class="value">{{ $registration->pekerjaan_ayah }}</span></div>
+        <div class="row"><span class="label">Penghasilan Ayah:</span> <span class="value">{{ $registration->penghasilan_ayah }}</span></div>
         <div class="row"><span class="label">Pekerjaan Ibu:</span> <span class="value">{{ $registration->pekerjaan_ibu }}</span></div>
+        <div class="row"><span class="label">Penghasilan Ibu:</span> <span class="value">{{ $registration->penghasilan_ibu }}</span></div>
         <div class="row"><span class="label">Alamat:</span> <span class="value">{{ $registration->alamat }}</span></div>
-        <div class="row"><span class="label">No. Telp:</span> <span class="value">{{ $registration->no_telp }}</span></div>
     </div>
     <div class="footer">
         Dicetak otomatis dari sistem pendaftaran sekolah &mdash; {{ date('d M Y H:i') }}
