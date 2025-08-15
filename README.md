@@ -1,6 +1,6 @@
-# Profile Sekolah
+# SD IT Semesta Cendekia
 
-Aplikasi web profile sekolah dengan fitur pendaftaran siswa berbasis Laravel.
+Aplikasi web profile SD IT Semesta Cendekia dengan fitur pendaftaran siswa berbasis Laravel.
 
 ## Fitur
 
